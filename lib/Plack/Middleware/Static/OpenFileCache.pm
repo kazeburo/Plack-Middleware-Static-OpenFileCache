@@ -7,7 +7,7 @@ use parent qw/Plack::Middleware::Static/;
 use Plack::Util::Accessor qw(max expires buf_size cache_errors);
 use Cache::LRU::WithExpires;
 
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 
 sub prepare_app {
     my $self = shift;
