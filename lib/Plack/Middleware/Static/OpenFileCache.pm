@@ -4,7 +4,7 @@ use 5.008005;
 use strict;
 use warnings;
 use parent qw/Plack::Middleware::Static/;
-use Plack::Util::Accessor qw(max expires cache_errors);
+use Plack::Util::Accessor qw(max expires buf_size cache_errors);
 use Cache::LRU::WithExpires;
 
 our $VERSION = "0.01";
@@ -14,6 +14,7 @@ sub prepare_app {
     my $max = $self->max;
     $max = 100 unless defined $max;
     $self->expires(60) unless defined $self->expires;
+    $self->buf_size(60) unless defined $self->buf_size;
     $self->{_cache_lru} = Cache::LRU::WithExpires->new(size => $max);
 }
 
@@ -31,9 +32,17 @@ sub _handle_static {
     $res = $self->SUPER::_handle_static($env);
     return unless defined $res;
     if ( ref $res->[2] ne 'ARRAY' ) {
-        my $io_path = $res->[2]->path;
-        bless $res->[2], 'Plack::Middleware::Static::OpenFileCache::IOWithPath';
-        $res->[2]->path($io_path);
+        my $len = Plack::Util::header_get($res->[1], 'Content-Length');
+        if ( $self->{buf_size} && $len && $len < $self->{buf_size} ) {
+            local $/ = 65536;
+            my $buf = $res->[2]->getline;
+            $res->[2] = [$buf];
+        }
+        else {
+            my $io_path = $res->[2]->path;
+            bless $res->[2], 'Plack::Middleware::Static::OpenFileCache::IOWithPath';
+            $res->[2]->path($io_path);
+        }
     }
     if ( $res->[0] =~ m!^2! or $self->cache_errors ) {
         $cache->set($path, $res, $self->expires);
@@ -73,6 +82,7 @@ Plack::Middleware::Static::OpenFileCache - Plack::Middleware::Static with open f
             root => './htdocs/',
             max  => 100,
             expires => 60,
+            buf_size => 8192,
             cache_errors => 1;
         $app;
     };
@@ -95,6 +105,11 @@ Maximum number of items in cache. If cache is overflowed, items are removed by L
 =item expires
 
 Expires seconds. 60 by default
+
+=item buf_size
+
+If content size of static file is smaller than buf_size. 
+Plack::Middleware::Static::OpenFileCache reads all to memory. 8192 byte by default.
 
 =item cache_errors
 
