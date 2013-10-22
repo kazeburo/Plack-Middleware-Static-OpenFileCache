@@ -4,7 +4,7 @@ use 5.008005;
 use strict;
 use warnings;
 use parent qw/Plack::Middleware::Static/;
-use Plack::Util::Accessor qw(max expires cache_errors _cache_lru);
+use Plack::Util::Accessor qw(max expires cache_errors);
 use Cache::LRU::WithExpires;
 
 our $VERSION = "0.01";
@@ -14,13 +14,13 @@ sub prepare_app {
     my $max = $self->max;
     $max = 100 unless defined $max;
     $self->expires(60) unless defined $self->expires;
-    $self->_cache_lru(Cache::LRU::WithExpires->new(size => $max));
+    $self->{_cache_lru} = Cache::LRU::WithExpires->new(size => $max);
 }
 
 sub _handle_static {
     my($self, $env) = @_;
     my $path = $env->{PATH_INFO};
-    my $cache = $self->_cache_lru;
+    my $cache = $self->{_cache_lru};
     my $res = $cache->get($path);
     if ( $res ) {
         if ( ref $res->[2] ne 'ARRAY' ) {
