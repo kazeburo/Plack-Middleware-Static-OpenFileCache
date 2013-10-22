@@ -83,7 +83,6 @@ Plack::Middleware::Static::OpenFileCache enables Plack::Middleware::Static
 to cache open file like nginx. This middleware cache opened file handles and their
 sizes and modification times for faster contents serving. 
 
-
 =head1 CONFIGURATIONS
 
 =over 4
@@ -100,6 +99,30 @@ Expires seconds. 60 by default
 =item cache_errors
 
 If enabled, this middleware cache response if status is 40x. Disabled by default.
+
+=back
+
+=head1 BENCHMARK
+
+benchmark with ApacheBench and L<Monoceros>
+
+=over 4
+
+=item benchmark on larger file
+
+  Document Path:          /static/jquery-1.10.2.min.js
+  Document Length:        93107 bytes
+  
+  Static                Requests per second:    1176.76 [#/sec] (mean)
+  Static::OpenFileCache Requests per second:    1372.09 [#/sec] (mean)
+
+=item benchmark on small file
+
+  Document Path:          /static/cpanfile
+  Document Length:        160 bytes
+  
+  Static                 Requests per second:    2018.13 [#/sec] (mean)
+  Static::OpenFileCache  Requests per second:    2639.02 [#/sec] (mean)
 
 =back
 
