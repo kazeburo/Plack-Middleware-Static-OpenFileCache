@@ -1,5 +1,5 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "Plack::Middleware::Static with open file cache",
    "author" : [
       "Masahiro Nagano <kazeburo@gmail.com>"
    ],
@@ -43,6 +43,8 @@
       },
       "runtime" : {
          "requires" : {
+            "Cache::LRU::WithExpires" : "0.03",
+            "Plack" : "1.0029",
             "perl" : "5.008005"
          }
       },
@@ -53,5 +55,16 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/kazeburo/Plack-Middleware-Static-OpenFileCache/issues"
+      },
+      "homepage" : "https://github.com/kazeburo/Plack-Middleware-Static-OpenFileCache",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/kazeburo/Plack-Middleware-Static-OpenFileCache.git",
+         "web" : "https://github.com/kazeburo/Plack-Middleware-Static-OpenFileCache"
+      }
+   },
    "version" : "0.01"
 }

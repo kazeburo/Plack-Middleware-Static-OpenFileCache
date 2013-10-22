@@ -61,15 +61,47 @@ __END__
 
 =head1 NAME
 
-Plack::Middleware::Static::OpenFileCache - It's new $module
+Plack::Middleware::Static::OpenFileCache - Plack::Middleware::Static with open file cache
 
 =head1 SYNOPSIS
 
     use Plack::Middleware::Static::OpenFileCache;
 
+    builder {
+        enable "Plack::Middleware::Static",
+            path => qr{^/(images|js|css)/},
+            root => './htdocs/',
+            max  => 100,
+            expires => 60,
+            cache_errors => 1;
+        $app;
+    };
+
 =head1 DESCRIPTION
 
-Plack::Middleware::Static::OpenFileCache is ...
+Plack::Middleware::Static::OpenFileCache enables Plack::Middleware::Static 
+to cache open file like nginx. This middleware cache opened file handles and their
+sizes and modification times for faster contents serving. 
+
+
+=head1 CONFIGURATIONS
+
+=over 4
+
+=item max
+
+Maximum number of items in cache. If cache is overflowed, items are removed by LRU.
+(100 by default)
+
+=item expires
+
+Expires seconds. 60 by default
+
+=item cache_errors
+
+If enabled, this middleware cache response if status is 40x. Disabled by default.
+
+=back
 
 =head1 LICENSE
 
