@@ -12,6 +12,7 @@ Plack::Middleware::Static::OpenFileCache - Plack::Middleware::Static with open f
             root => './htdocs/',
             max  => 100,
             expires => 60,
+            buf_size => 8192,
             cache_errors => 1;
         $app;
     };
@@ -33,6 +34,11 @@ sizes and modification times for faster contents serving.
 
     Expires seconds. 60 by default
 
+- buf\_size
+
+    If content size of static file is smaller than buf\_size. 
+    Plack::Middleware::Static::OpenFileCache reads all to memory. 8192 byte by default.
+
 - cache\_errors
 
     If enabled, this middleware cache response if status is 40x. Disabled by default.
@@ -47,8 +53,8 @@ benchmark with ApacheBench and [Monoceros](http://search.cpan.org/perldoc?Monoce
         Document Length:        93107 bytes
         
 
-        Static                Requests per second:    1176.76 [#/sec] (mean)
-        Static::OpenFileCache Requests per second:    1372.09 [#/sec] (mean)
+        Static                Requests per second:    1219.47 [#/sec] (mean)
+        Static::OpenFileCache Requests per second:    1483.52 [#/sec] (mean)
 - benchmark on small file
 
         Document Path:          /static/cpanfile
@@ -56,7 +62,7 @@ benchmark with ApacheBench and [Monoceros](http://search.cpan.org/perldoc?Monoce
         
 
         Static                 Requests per second:    2018.13 [#/sec] (mean)
-        Static::OpenFileCache  Requests per second:    2639.02 [#/sec] (mean)
+        Static::OpenFileCache  Requests per second:    2813.08 [#/sec] (mean)
 
 # LICENSE
 

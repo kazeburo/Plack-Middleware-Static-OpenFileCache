@@ -128,8 +128,8 @@ benchmark with ApacheBench and L<Monoceros>
   Document Path:          /static/jquery-1.10.2.min.js
   Document Length:        93107 bytes
   
-  Static                Requests per second:    1176.76 [#/sec] (mean)
-  Static::OpenFileCache Requests per second:    1372.09 [#/sec] (mean)
+  Static                Requests per second:    1219.47 [#/sec] (mean)
+  Static::OpenFileCache Requests per second:    1483.52 [#/sec] (mean)
 
 =item benchmark on small file
 
@@ -137,7 +137,7 @@ benchmark with ApacheBench and L<Monoceros>
   Document Length:        160 bytes
   
   Static                 Requests per second:    2018.13 [#/sec] (mean)
-  Static::OpenFileCache  Requests per second:    2639.02 [#/sec] (mean)
+  Static::OpenFileCache  Requests per second:    2813.08 [#/sec] (mean)
 
 =back
 
