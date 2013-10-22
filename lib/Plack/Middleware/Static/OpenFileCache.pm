@@ -14,7 +14,7 @@ sub prepare_app {
     my $max = $self->max;
     $max = 100 unless defined $max;
     $self->expires(60) unless defined $self->expires;
-    $self->buf_size(60) unless defined $self->buf_size;
+    $self->buf_size(8192) unless defined $self->buf_size;
     $self->{_cache_lru} = Cache::LRU::WithExpires->new(size => $max);
 }
 
